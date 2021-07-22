@@ -21,7 +21,9 @@ mongo = PyMongo(app)
 @app.route("/get_tasks")
 def get_tasks():
     tasks = mongo.db.tasks.find()
+    # "tasks" equals entire tasks database from MongoDB
     return render_template("tasks.html", tasks_variable=tasks)
+    # "tasks_variable" in tasks.html file set to equal "tasks"
 
 
 if __name__ == "__main__":
