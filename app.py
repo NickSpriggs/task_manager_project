@@ -16,7 +16,7 @@ app.config["MONGO_URI"] = os.environ.get("MONGO_URI")
 app.secret_key = os.environ.get("SECRET_KEY")
 
 mongo = PyMongo(app)
-
+# This is the instance of our Flask app using pyMongo
 
 @app.route("/")
 @app.route("/get_tasks")
@@ -25,6 +25,14 @@ def get_tasks():
     # "tasks" equals entire tasks database from MongoDB
     return render_template("tasks.html", tasks_variable=tasks)
     # "tasks_variable" in tasks.html file set to equal "tasks"
+
+
+@app.route("/search", methods=["GET", "POST"])
+def search():
+    query = request.form.get("query")
+    tasks = list(mongo.db.tasks.find({"$text": {"$search": query}}))
+    return render_template("tasks.html", tasks_variable=tasks)
+    # "tasks_variable" in tasks.html file set to equal "tasks"    
 
 
 @app.route("/register", methods=["GET", "POST"])
